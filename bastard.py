@@ -56,6 +56,18 @@ class MLTrader(Strategy):
         return probability, sentiment
 
 
+    def risk_values(self, buy=True):
+        cash = self.get_cash()
+        if buy:
+            min_value = 0.95
+            max_value = 1.20
+        else:
+            min_value = 0.8
+            max_value = 1.05
+
+        return min_value, max_value
+
+
 
 
 
@@ -64,6 +76,7 @@ class MLTrader(Strategy):
         probability, sentiment = self.get_sentiment()
         if cash > last_price:
             if sentiment == "positive" and probability > .999:
+                min_val, max_val = self.risk_values(buy=True)
                 if self.last_trade == "sell":
                     self.sell_all()
                 order = self.create_order(
@@ -71,12 +84,13 @@ class MLTrader(Strategy):
                     quantity,
                     "buy",
                     type="bracket",
-                    take_profit_price=last_price * 1.20,
-                    stop_loss_price= last_price * .95
+                    take_profit_price=last_price * max_val,
+                    stop_loss_price=last_price * min_val
                 )
                 self.submit_order(order)
                 self.last_trade = "buy"
             elif sentiment == "negative" and probability > .999:
+                min_val, max_val = self.risk_values(buy=False)
                 if self.last_trade == "buy":
                     self.sell_all()
                 order = self.create_order(
@@ -84,14 +98,14 @@ class MLTrader(Strategy):
                     quantity,
                     "sell",
                     type="bracket",
-                    take_profit_price=last_price * 0.8,
-                    stop_loss_price= last_price * 1.05
+                    take_profit_price=last_price * min_val,
+                    stop_loss_price=last_price * max_val
                 )
                 self.submit_order(order)
                 self.last_trade = "sell"
 
-start_date = datetime(2020,1,1)
-end_date = datetime(2023,12,31)
+start_date = datetime(2023,1,1)
+end_date = datetime(2024,1,21)
 broker = Alpaca(ALPACA_CREDS)
 
 strategy = MLTrader(name='bastardv1', 
