@@ -34,22 +34,11 @@ class MLTrader(Strategy):
         self.api = REST(base_url=BASE_URL, key_id=API_KEY, secret_key=API_SECRET)
 
 
-
     def position_sizing(self):
         cash = self.get_cash()
         last_price = self.get_last_price(self.symbol)
         quantity = round(cash * self.cash_at_risk / last_price)
-
-        while quantity * last_price > cash:
-            quantity -= 1
-
-        if quantity * last_price > cash:
-            quantity = 0
-
         return cash, last_price, quantity
-
-
-
     
     def get_dates(self):
         today = self.get_datetime()
@@ -88,24 +77,18 @@ class MLTrader(Strategy):
         # Ensure the probability value is within a reasonable range
         probability_value = max(0.7, min(0.9, probability_value))
 
-        return 0.99
+        return probability_value
 
 
 
 
 
     def on_trading_iteration(self):
-        CASH_MINIMUM = 1000
+        CASH_MINIMUM = 1000  
         probability_value = self.get_probability_value()
         cash, last_price, quantity = self.position_sizing()
-
-        if cash <= 0:
-            print("Insufficient funds. Halting trades.")
-            return
-
         probability, sentiment = self.get_sentiment()
-
-        if cash > last_price and cash > CASH_MINIMUM and cash > 0:
+        if cash > last_price and cash > CASH_MINIMUM:
             if sentiment == "positive" and probability > probability_value:
                 min_val, max_val = self.risk_values(buy=True)
                 if self.last_trade == "sell":
@@ -135,9 +118,8 @@ class MLTrader(Strategy):
                 self.submit_order(order)
                 self.last_trade = "sell"
 
-
-start_date = datetime(2024,1,1)
-end_date = datetime(2024,1,21)
+start_date = datetime(2022,12,31)
+end_date = datetime(2023,12,31)
 broker = Alpaca(ALPACA_CREDS)
 
 strategy = MLTrader(name='bastardv1', 
