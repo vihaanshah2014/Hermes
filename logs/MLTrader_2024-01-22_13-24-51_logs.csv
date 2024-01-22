@@ -1,0 +1,154 @@
+2024-01-22 13:24:51,313: root: INFO: MLTrader : Executing the initialize lifecycle method
+2024-01-22 13:24:53,075: root: INFO: Current backtesting datetime 2023-12-01 08:30:00-05:00
+2024-01-22 13:24:53,075: root: INFO: MLTrader : Executing the before_market_opens lifecycle method
+2024-01-22 13:24:53,075: root: INFO: Current backtesting datetime 2023-12-01 09:30:00-05:00
+2024-01-22 13:24:53,075: root: INFO: MLTrader : Executing the before_starting_trading lifecycle method
+2024-01-22 13:24:53,081: root: INFO: [34mMLTrader : Executing the on_trading_iteration lifecycle method at 2024-01-22 13:24:53[0m
+2024-01-22 13:24:53,082: root: INFO: [34mMLTrader : Trading iteration ended at 2024-01-22 13:24:53[0m
+2024-01-22 13:24:53,082: root: INFO: MLTrader : [34mSleeping for 86400 seconds[0m
+2024-01-22 13:24:53,082: root: INFO: Current backtesting datetime 2023-12-01 16:00:00-05:00
+2024-01-22 13:24:53,082: root: INFO: Current backtesting datetime 2023-12-02 09:30:00-05:00
+2024-01-22 13:24:53,082: root: INFO: [34mMLTrader : The market is not currently open, skipping this trading iteration[0m
+2024-01-22 13:24:53,082: root: INFO: Current backtesting datetime 2023-12-02 09:29:00-05:00
+2024-01-22 13:24:53,082: root: INFO: Current backtesting datetime 2023-12-02 09:29:00-05:00
+2024-01-22 13:24:53,082: root: INFO: MLTrader : Executing the after_market_closes lifecycle method
+2024-01-22 13:24:53,090: root: INFO: Current backtesting datetime 2023-12-04 08:30:00-05:00
+2024-01-22 13:24:53,091: root: INFO: MLTrader : Executing the before_market_opens lifecycle method
+2024-01-22 13:24:53,092: root: INFO: Current backtesting datetime 2023-12-04 09:30:00-05:00
+2024-01-22 13:24:53,092: root: INFO: MLTrader : Executing the before_starting_trading lifecycle method
+2024-01-22 13:24:53,092: root: INFO: [34mMLTrader : Executing the on_trading_iteration lifecycle method at 2024-01-22 13:24:53[0m
+2024-01-22 13:24:53,092: root: INFO: [34mMLTrader : Trading iteration ended at 2024-01-22 13:24:53[0m
+2024-01-22 13:24:53,092: root: INFO: MLTrader : [34mSleeping for 86400 seconds[0m
+2024-01-22 13:24:53,092: root: INFO: Current backtesting datetime 2023-12-04 16:00:00-05:00
+2024-01-22 13:24:53,092: root: INFO: Current backtesting datetime 2023-12-05 09:30:00-05:00
+2024-01-22 13:24:53,092: root: INFO: [34mMLTrader : Executing the on_trading_iteration lifecycle method at 2024-01-22 13:24:53[0m
+2024-01-22 13:24:53,092: root: INFO: [34mMLTrader : Trading iteration ended at 2024-01-22 13:24:53[0m
+2024-01-22 13:24:53,092: root: INFO: MLTrader : [34mSleeping for 86400 seconds[0m
+2024-01-22 13:24:53,092: root: INFO: Current backtesting datetime 2023-12-05 16:00:00-05:00
+2024-01-22 13:24:53,092: root: INFO: Current backtesting datetime 2023-12-06 09:30:00-05:00
+2024-01-22 13:24:53,100: root: INFO: [34mMLTrader : Executing the on_trading_iteration lifecycle method at 2024-01-22 13:24:53[0m
+2024-01-22 13:24:53,100: root: INFO: [34mMLTrader : Trading iteration ended at 2024-01-22 13:24:53[0m
+2024-01-22 13:24:53,101: root: INFO: MLTrader : [34mSleeping for 86400 seconds[0m
+2024-01-22 13:24:53,101: root: INFO: Current backtesting datetime 2023-12-06 16:00:00-05:00
+2024-01-22 13:24:53,101: root: INFO: Current backtesting datetime 2023-12-07 09:30:00-05:00
+2024-01-22 13:24:53,101: root: INFO: [34mMLTrader : Executing the on_trading_iteration lifecycle method at 2024-01-22 13:24:53[0m
+2024-01-22 13:24:53,101: root: INFO: [34mMLTrader : Trading iteration ended at 2024-01-22 13:24:53[0m
+2024-01-22 13:24:53,101: root: INFO: MLTrader : [34mSleeping for 86400 seconds[0m
+2024-01-22 13:24:53,101: root: INFO: Current backtesting datetime 2023-12-07 16:00:00-05:00
+2024-01-22 13:24:53,101: root: INFO: Current backtesting datetime 2023-12-08 09:30:00-05:00
+2024-01-22 13:24:53,101: root: INFO: [34mMLTrader : Executing the on_trading_iteration lifecycle method at 2024-01-22 13:24:53[0m
+2024-01-22 13:24:53,101: root: INFO: [34mMLTrader : Trading iteration ended at 2024-01-22 13:24:53[0m
+2024-01-22 13:24:53,101: root: INFO: MLTrader : [34mSleeping for 86400 seconds[0m
+2024-01-22 13:24:53,101: root: INFO: Current backtesting datetime 2023-12-08 16:00:00-05:00
+2024-01-22 13:24:53,111: root: INFO: Current backtesting datetime 2023-12-09 09:30:00-05:00
+2024-01-22 13:24:53,112: root: INFO: [34mMLTrader : The market is not currently open, skipping this trading iteration[0m
+2024-01-22 13:24:53,112: root: INFO: Current backtesting datetime 2023-12-09 09:29:00-05:00
+2024-01-22 13:24:53,112: root: INFO: Current backtesting datetime 2023-12-09 09:29:00-05:00
+2024-01-22 13:24:53,112: root: INFO: MLTrader : Executing the after_market_closes lifecycle method
+2024-01-22 13:24:53,112: root: INFO: Current backtesting datetime 2023-12-11 08:30:00-05:00
+2024-01-22 13:24:53,112: root: INFO: MLTrader : Executing the before_market_opens lifecycle method
+2024-01-22 13:24:53,112: root: INFO: Current backtesting datetime 2023-12-11 09:30:00-05:00
+2024-01-22 13:24:53,112: root: INFO: MLTrader : Executing the before_starting_trading lifecycle method
+2024-01-22 13:24:53,121: root: INFO: [34mMLTrader : Executing the on_trading_iteration lifecycle method at 2024-01-22 13:24:53[0m
+2024-01-22 13:24:53,121: root: INFO: [34mMLTrader : Trading iteration ended at 2024-01-22 13:24:53[0m
+2024-01-22 13:24:53,122: root: INFO: MLTrader : [34mSleeping for 86400 seconds[0m
+2024-01-22 13:24:53,122: root: INFO: Current backtesting datetime 2023-12-11 16:00:00-05:00
+2024-01-22 13:24:53,122: root: INFO: Current backtesting datetime 2023-12-12 09:30:00-05:00
+2024-01-22 13:24:53,122: root: INFO: [34mMLTrader : Executing the on_trading_iteration lifecycle method at 2024-01-22 13:24:53[0m
+2024-01-22 13:24:53,122: root: INFO: [34mMLTrader : Trading iteration ended at 2024-01-22 13:24:53[0m
+2024-01-22 13:24:53,122: root: INFO: MLTrader : [34mSleeping for 86400 seconds[0m
+2024-01-22 13:24:53,122: root: INFO: Current backtesting datetime 2023-12-12 16:00:00-05:00
+2024-01-22 13:24:53,122: root: INFO: Current backtesting datetime 2023-12-13 09:30:00-05:00
+2024-01-22 13:24:53,122: root: INFO: [34mMLTrader : Executing the on_trading_iteration lifecycle method at 2024-01-22 13:24:53[0m
+2024-01-22 13:24:53,122: root: INFO: [34mMLTrader : Trading iteration ended at 2024-01-22 13:24:53[0m
+2024-01-22 13:24:53,130: root: INFO: MLTrader : [34mSleeping for 86400 seconds[0m
+2024-01-22 13:24:53,134: root: INFO: Current backtesting datetime 2023-12-13 16:00:00-05:00
+2024-01-22 13:24:53,134: root: INFO: Current backtesting datetime 2023-12-14 09:30:00-05:00
+2024-01-22 13:24:53,135: root: INFO: [34mMLTrader : Executing the on_trading_iteration lifecycle method at 2024-01-22 13:24:53[0m
+2024-01-22 13:24:53,136: root: INFO: [34mMLTrader : Trading iteration ended at 2024-01-22 13:24:53[0m
+2024-01-22 13:24:53,144: root: INFO: MLTrader : [34mSleeping for 86400 seconds[0m
+2024-01-22 13:24:53,146: root: INFO: Current backtesting datetime 2023-12-14 16:00:00-05:00
+2024-01-22 13:24:53,147: root: INFO: Current backtesting datetime 2023-12-15 09:30:00-05:00
+2024-01-22 13:24:53,148: root: INFO: [34mMLTrader : Executing the on_trading_iteration lifecycle method at 2024-01-22 13:24:53[0m
+2024-01-22 13:24:53,148: root: INFO: [34mMLTrader : Trading iteration ended at 2024-01-22 13:24:53[0m
+2024-01-22 13:24:53,149: root: INFO: MLTrader : [34mSleeping for 86400 seconds[0m
+2024-01-22 13:24:53,150: root: INFO: Current backtesting datetime 2023-12-15 16:00:00-05:00
+2024-01-22 13:24:53,151: root: INFO: Current backtesting datetime 2023-12-16 09:30:00-05:00
+2024-01-22 13:24:53,153: root: INFO: [34mMLTrader : The market is not currently open, skipping this trading iteration[0m
+2024-01-22 13:24:53,158: root: INFO: Current backtesting datetime 2023-12-16 09:29:00-05:00
+2024-01-22 13:24:53,166: root: INFO: Current backtesting datetime 2023-12-16 09:29:00-05:00
+2024-01-22 13:24:53,167: root: INFO: MLTrader : Executing the after_market_closes lifecycle method
+2024-01-22 13:24:53,171: root: INFO: Current backtesting datetime 2023-12-18 08:30:00-05:00
+2024-01-22 13:24:53,177: root: INFO: MLTrader : Executing the before_market_opens lifecycle method
+2024-01-22 13:24:53,180: root: INFO: Current backtesting datetime 2023-12-18 09:30:00-05:00
+2024-01-22 13:24:53,180: root: INFO: MLTrader : Executing the before_starting_trading lifecycle method
+2024-01-22 13:24:53,184: root: INFO: [34mMLTrader : Executing the on_trading_iteration lifecycle method at 2024-01-22 13:24:53[0m
+2024-01-22 13:24:53,184: root: INFO: [34mMLTrader : Trading iteration ended at 2024-01-22 13:24:53[0m
+2024-01-22 13:24:53,184: root: INFO: MLTrader : [34mSleeping for 86400 seconds[0m
+2024-01-22 13:24:53,190: root: INFO: Current backtesting datetime 2023-12-18 16:00:00-05:00
+2024-01-22 13:24:53,193: root: INFO: Current backtesting datetime 2023-12-19 09:30:00-05:00
+2024-01-22 13:24:53,195: root: INFO: [34mMLTrader : Executing the on_trading_iteration lifecycle method at 2024-01-22 13:24:53[0m
+2024-01-22 13:24:53,195: root: INFO: [34mMLTrader : Trading iteration ended at 2024-01-22 13:24:53[0m
+2024-01-22 13:24:53,197: root: INFO: MLTrader : [34mSleeping for 86400 seconds[0m
+2024-01-22 13:24:53,200: root: INFO: Current backtesting datetime 2023-12-19 16:00:00-05:00
+2024-01-22 13:24:53,201: root: INFO: Current backtesting datetime 2023-12-20 09:30:00-05:00
+2024-01-22 13:24:53,201: root: INFO: [34mMLTrader : Executing the on_trading_iteration lifecycle method at 2024-01-22 13:24:53[0m
+2024-01-22 13:24:53,201: root: INFO: [34mMLTrader : Trading iteration ended at 2024-01-22 13:24:53[0m
+2024-01-22 13:24:53,207: root: INFO: MLTrader : [34mSleeping for 86400 seconds[0m
+2024-01-22 13:24:53,211: root: INFO: Current backtesting datetime 2023-12-20 16:00:00-05:00
+2024-01-22 13:24:53,211: root: INFO: Current backtesting datetime 2023-12-21 09:30:00-05:00
+2024-01-22 13:24:53,214: root: INFO: [34mMLTrader : Executing the on_trading_iteration lifecycle method at 2024-01-22 13:24:53[0m
+2024-01-22 13:24:53,214: root: INFO: [34mMLTrader : Trading iteration ended at 2024-01-22 13:24:53[0m
+2024-01-22 13:24:53,214: root: INFO: MLTrader : [34mSleeping for 86400 seconds[0m
+2024-01-22 13:24:53,214: root: INFO: Current backtesting datetime 2023-12-21 16:00:00-05:00
+2024-01-22 13:24:53,214: root: INFO: Current backtesting datetime 2023-12-22 09:30:00-05:00
+2024-01-22 13:24:53,221: root: INFO: [34mMLTrader : Executing the on_trading_iteration lifecycle method at 2024-01-22 13:24:53[0m
+2024-01-22 13:24:53,221: root: INFO: [34mMLTrader : Trading iteration ended at 2024-01-22 13:24:53[0m
+2024-01-22 13:24:53,227: root: INFO: MLTrader : [34mSleeping for 86400 seconds[0m
+2024-01-22 13:24:53,229: root: INFO: Current backtesting datetime 2023-12-22 16:00:00-05:00
+2024-01-22 13:24:53,230: root: INFO: Current backtesting datetime 2023-12-23 09:30:00-05:00
+2024-01-22 13:24:53,235: root: INFO: [34mMLTrader : The market is not currently open, skipping this trading iteration[0m
+2024-01-22 13:24:53,243: root: INFO: Current backtesting datetime 2023-12-23 09:29:00-05:00
+2024-01-22 13:24:53,246: root: INFO: Current backtesting datetime 2023-12-23 09:29:00-05:00
+2024-01-22 13:24:53,247: root: INFO: MLTrader : Executing the after_market_closes lifecycle method
+2024-01-22 13:24:53,251: root: INFO: Current backtesting datetime 2023-12-26 08:30:00-05:00
+2024-01-22 13:24:53,253: root: INFO: MLTrader : Executing the before_market_opens lifecycle method
+2024-01-22 13:24:53,257: root: INFO: Current backtesting datetime 2023-12-26 09:30:00-05:00
+2024-01-22 13:24:53,257: root: INFO: MLTrader : Executing the before_starting_trading lifecycle method
+2024-01-22 13:24:53,262: root: INFO: [34mMLTrader : Executing the on_trading_iteration lifecycle method at 2024-01-22 13:24:53[0m
+2024-01-22 13:24:53,262: root: INFO: [34mMLTrader : Trading iteration ended at 2024-01-22 13:24:53[0m
+2024-01-22 13:24:53,264: root: INFO: MLTrader : [34mSleeping for 86400 seconds[0m
+2024-01-22 13:24:53,264: root: INFO: Current backtesting datetime 2023-12-26 16:00:00-05:00
+2024-01-22 13:24:53,264: root: INFO: Current backtesting datetime 2023-12-27 09:30:00-05:00
+2024-01-22 13:24:53,270: root: INFO: [34mMLTrader : Executing the on_trading_iteration lifecycle method at 2024-01-22 13:24:53[0m
+2024-01-22 13:24:53,270: root: INFO: [34mMLTrader : Trading iteration ended at 2024-01-22 13:24:53[0m
+2024-01-22 13:24:53,271: root: INFO: MLTrader : [34mSleeping for 86400 seconds[0m
+2024-01-22 13:24:53,274: root: INFO: Current backtesting datetime 2023-12-27 16:00:00-05:00
+2024-01-22 13:24:53,274: root: INFO: Current backtesting datetime 2023-12-28 09:30:00-05:00
+2024-01-22 13:24:53,277: root: INFO: [34mMLTrader : Executing the on_trading_iteration lifecycle method at 2024-01-22 13:24:53[0m
+2024-01-22 13:24:53,278: root: INFO: [34mMLTrader : Trading iteration ended at 2024-01-22 13:24:53[0m
+2024-01-22 13:24:53,279: root: INFO: MLTrader : [34mSleeping for 86400 seconds[0m
+2024-01-22 13:24:53,282: root: INFO: Current backtesting datetime 2023-12-28 16:00:00-05:00
+2024-01-22 13:24:53,282: root: INFO: Current backtesting datetime 2023-12-29 09:30:00-05:00
+2024-01-22 13:24:53,282: root: INFO: [34mMLTrader : Executing the on_trading_iteration lifecycle method at 2024-01-22 13:24:53[0m
+2024-01-22 13:24:53,282: root: INFO: [34mMLTrader : Trading iteration ended at 2024-01-22 13:24:53[0m
+2024-01-22 13:24:53,282: root: INFO: MLTrader : [34mSleeping for 86400 seconds[0m
+2024-01-22 13:24:53,289: root: INFO: Current backtesting datetime 2023-12-29 16:00:00-05:00
+2024-01-22 13:24:53,290: root: INFO: Current backtesting datetime 2023-12-30 09:30:00-05:00
+2024-01-22 13:24:53,294: root: INFO: [34mMLTrader : The market is not currently open, skipping this trading iteration[0m
+2024-01-22 13:24:53,300: root: INFO: Current backtesting datetime 2023-12-30 09:29:00-05:00
+2024-01-22 13:24:53,303: root: INFO: Current backtesting datetime 2023-12-30 09:29:00-05:00
+2024-01-22 13:24:53,303: root: INFO: MLTrader : Executing the after_market_closes lifecycle method
+2024-01-22 13:24:53,303: root: INFO: Current backtesting datetime 2024-01-02 08:30:00-05:00
+2024-01-22 13:24:53,303: root: INFO: MLTrader : Executing the before_market_opens lifecycle method
+2024-01-22 13:24:53,309: root: INFO: Current backtesting datetime 2024-01-02 09:30:00-05:00
+2024-01-22 13:24:53,310: root: INFO: MLTrader : Executing the before_starting_trading lifecycle method
+2024-01-22 13:24:53,314: root: INFO: Current backtesting datetime 2024-01-02 15:59:00-05:00
+2024-01-22 13:24:53,314: root: INFO: MLTrader : Executing the before_market_closes lifecycle method
+2024-01-22 13:24:53,314: root: INFO: Current backtesting datetime 2024-01-02 16:00:00-05:00
+2024-01-22 13:24:53,314: root: INFO: MLTrader : Executing the after_market_closes lifecycle method
+2024-01-22 13:24:53,314: root: INFO: MLTrader : Executing the on_strategy_end lifecycle method
+2024-01-22 13:24:53,363: root: INFO: Backtesting finished
+2024-01-22 13:24:53,381: root: INFO: There were no trades in this backtest.
+2024-01-22 13:24:53,491: root: ERROR: Not enough data to create a tearsheet, at least 2 days of data are required. Skipping
+2024-01-22 13:24:53,491: backtest_stats: INFO: Backtest took 0:00:02.190052 for a speed of 0.000
