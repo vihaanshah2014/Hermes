@@ -66,16 +66,29 @@ class MLTrader(Strategy):
             max_value = 1.05
 
         return min_value, max_value
+    
+    def get_probability_value(self):
+        base_cash = 100000  # Set the base cash value
+        cash_reserve_percentage = self.get_cash() / base_cash
+
+        # Customize this formula based on your risk strategy
+        probability_value = 0.8 + 0.05 * cash_reserve_percentage
+
+        # Ensure the probability value is within a reasonable range
+        probability_value = max(0.7, min(0.9, probability_value))
+
+        return probability_value
 
 
 
 
 
     def on_trading_iteration(self):
+        probability_value = self.get_probability_value()
         cash, last_price, quantity = self.position_sizing()
         probability, sentiment = self.get_sentiment()
         if cash > last_price:
-            if sentiment == "positive" and probability > .999:
+            if sentiment == "positive" and probability > probability_value:
                 min_val, max_val = self.risk_values(buy=True)
                 if self.last_trade == "sell":
                     self.sell_all()
@@ -89,7 +102,7 @@ class MLTrader(Strategy):
                 )
                 self.submit_order(order)
                 self.last_trade = "buy"
-            elif sentiment == "negative" and probability > .999:
+            elif sentiment == "negative" and probability > probability_value:
                 min_val, max_val = self.risk_values(buy=False)
                 if self.last_trade == "buy":
                     self.sell_all()
