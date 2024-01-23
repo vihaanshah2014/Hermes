@@ -67,7 +67,7 @@ class MLTrader(Strategy):
         return probability, sentiment
 
 
-    def risk_values(self, buy=True):
+    def risk_values(self, probability, buy=True):
         cash = self.get_cash()
         if buy:
             min_value = 0.95
@@ -99,15 +99,12 @@ class MLTrader(Strategy):
         probability_value = self.get_probability_value()
         cash, last_price, quantity = self.position_sizing()
 
-        if cash <= 0:
-            print("Insufficient funds. Halting trades.")
-            return
 
         probability, sentiment = self.get_sentiment()
 
         if cash > last_price and cash > CASH_MINIMUM and cash > 0:
             if sentiment == "positive" and probability > probability_value:
-                min_val, max_val = self.risk_values(buy=True)
+                min_val, max_val = self.risk_values(probability=probability, buy=True)
                 if self.last_trade == "sell":
                     self.sell_all()
                 order = self.create_order(
@@ -121,7 +118,7 @@ class MLTrader(Strategy):
                 self.submit_order(order)
                 self.last_trade = "buy"
             elif sentiment == "negative" and probability > probability_value:
-                min_val, max_val = self.risk_values(buy=False)
+                min_val, max_val = self.risk_values(probability=probability, buy=False)
                 if self.last_trade == "buy":
                         self.sell_all()
                 order = self.create_order(
