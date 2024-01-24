@@ -5,6 +5,8 @@ from lumibot.brokers import Alpaca
 from lumibot.backtesting import YahooDataBacktesting
 from lumibot.strategies.strategy import Strategy
 from lumibot.traders import Trader
+import pandas as pd
+
 from datetime import datetime
 
 # news api
@@ -109,7 +111,7 @@ class MLTrader(Strategy):
         end_date = today.strftime('%Y-%m-%d')
         start_date = start_date.strftime('%Y-%m-%d')
         # Fetch historical data for the given period
-        historical_data = self.api.get_historical_data(symbol=self.symbol, start=start_date, end=end_date, timeframe="1D")
+        historical_data = self.api.get_barset(symbols=self.symbol, timeframe='day', limit=days).df[self.symbol]
         # Calculate the moving average
         total = sum([candle.close for candle in historical_data])
         moving_average = total / days
