@@ -67,17 +67,29 @@ class MLTrader(Strategy):
         return probability, sentiment
 
 
+
     def risk_values(self, probability, buy=True):
+        base_cash = 100000  # Set the base cash value
         cash = self.get_cash()
-        if buy:
-            min_value = 0.95
-            max_value = 1.20
+
+        if cash < base_cash:
+            adjustment_factor = max(0.5, cash / base_cash)
         else:
-            min_value = 0.8
-            max_value = 1.05
+            adjustment_factor = 1
+
+        if buy:
+            min_value = 0.95 * adjustment_factor
+            max_value = 1.20 * adjustment_factor
+        else:
+            min_value = 0.8 * adjustment_factor
+            max_value = 1.05 * adjustment_factor
 
         return min_value, max_value
+
     
+
+
+
     def get_probability_value(self):
         base_cash = 100000  # Set the base cash value
         cash_reserve_percentage = self.get_cash() / base_cash
@@ -134,7 +146,7 @@ class MLTrader(Strategy):
 
 
 start_date = datetime(2024,1,15)
-end_date = datetime(2024,1,21)
+end_date = datetime(2024,1,23)
 broker = Alpaca(ALPACA_CREDS)
 
 strategy = MLTrader(name='bastardv1', 
