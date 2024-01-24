@@ -101,7 +101,19 @@ class MLTrader(Strategy):
         probability_value = max(0.7, min(0.9, probability_value))
 
         return probability_value
+    
 
+    def calculate_moving_average(self, days: int):
+        today = self.get_datetime()
+        start_date = today - Timedelta(days=days)
+        end_date = today.strftime('%Y-%m-%d')
+        start_date = start_date.strftime('%Y-%m-%d')
+        # Fetch historical data for the given period
+        historical_data = self.api.get_historical_data(symbol=self.symbol, start=start_date, end=end_date, timeframe="1D")
+        # Calculate the moving average
+        total = sum([candle.close for candle in historical_data])
+        moving_average = total / days
+        return moving_average
 
 
 
@@ -110,12 +122,14 @@ class MLTrader(Strategy):
         CASH_MINIMUM = 1000
         probability_value = self.get_probability_value()
         cash, last_price, quantity = self.position_sizing()
+        moving_average = self.calculate_moving_average(50)
+
 
 
         probability, sentiment = self.get_sentiment()
 
-        if cash > last_price and cash > CASH_MINIMUM and cash > 0:
-            if sentiment == "positive" and probability > probability_value:
+        if cash > last_price and cash > CASH_MINIMUM:
+            if last_price < moving_average and sentiment == "positive" and probability > probability_value:
                 min_val, max_val = self.risk_values(probability=probability, buy=True)
                 if self.last_trade == "sell":
                     self.sell_all()
@@ -129,7 +143,7 @@ class MLTrader(Strategy):
                 )
                 self.submit_order(order)
                 self.last_trade = "buy"
-            elif sentiment == "negative" and probability > probability_value:
+            elif last_price > moving_average and sentiment == "negative" and probability > probability_value: 
                 min_val, max_val = self.risk_values(probability=probability, buy=False)
                 if self.last_trade == "buy":
                         self.sell_all()
