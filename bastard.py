@@ -6,7 +6,8 @@ from lumibot.backtesting import YahooDataBacktesting
 from lumibot.strategies.strategy import Strategy
 from lumibot.traders import Trader
 import pandas as pd
-
+import pytz
+import yfinance as yf
 from datetime import datetime
 
 # news api
@@ -108,28 +109,14 @@ class MLTrader(Strategy):
     
     
     def calculate_moving_average(self, days: int):
-        today = self.get_datetime()
-        start_date = today - timedelta(days=days)  # Use timedelta to calculate start_date
-        end_date = today.strftime('%Y-%m-%d')
-
-        # Fetch historical data for the given period
-        historical_data = self.api.get_asset(
-            symbols=self.symbol,
-            timeframe='day',
-            start=start_date.strftime('%Y-%m-%d'),  # Format start_date as string
-            end=end_date,
-            limit=days
-        ).df[self.symbol]
-
-        # Calculate the moving average
-        total = sum([candle.close for candle in historical_data])
-        moving_average = total / days
+        
+        #use yfinance
         return moving_average
 
 
 
 
-    def on_trading_iteration(self):
+    def on_trading_iteration(self): 
         CASH_MINIMUM = 1000
         probability_value = self.get_probability_value()
         cash, last_price, quantity = self.position_sizing()

@@ -1,0 +1,57 @@
+2024-01-24 20:43:44,635: root: INFO: MLTrader : Executing the initialize lifecycle method
+2024-01-24 20:43:49,260: root: INFO: Current backtesting datetime 2024-01-16 08:30:00-05:00
+2024-01-24 20:43:49,269: root: INFO: MLTrader : Executing the before_market_opens lifecycle method
+2024-01-24 20:43:49,269: root: INFO: Current backtesting datetime 2024-01-16 09:30:00-05:00
+2024-01-24 20:43:49,269: root: INFO: MLTrader : Executing the before_starting_trading lifecycle method
+2024-01-24 20:43:49,277: root: INFO: [34mMLTrader : Executing the on_trading_iteration lifecycle method at 2024-01-24 20:43:49[0m
+2024-01-24 20:43:49,277: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-01-24 20:43:49,302: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-01-24 20:43:49,302: asyncio: WARNING: The get_bars method is deprecated and will be removed in a future version. Please use self.get_historical_prices_for_assets() instead.
+2024-01-24 20:43:49,302: root: INFO: Getting historical prices for SPU, 1DAY bars, 2023-12-05 20:43:49.302463
+2024-01-24 20:43:49,302: root: ERROR: YAHOO data source does not have data with datetime.datetime(2023, 12, 5, 20, 43, 49, 302463) timestep
+2024-01-24 20:43:49,310: root: ERROR: Traceback (most recent call last):
+  File "C:\Users\Dell\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\lumibot\strategies\strategy_executor.py", line 829, in run
+    self._run_trading_session()
+  File "C:\Users\Dell\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\lumibot\strategies\strategy_executor.py", line 780, in _run_trading_session
+    self._on_trading_iteration()
+  File "C:\Users\Dell\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\lumibot\strategies\strategy_executor.py", line 274, in func_output
+    result = func_input(self, *args, **kwargs)
+  File "C:\Users\Dell\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\lumibot\strategies\strategy_executor.py", line 298, in func_output
+    result = func_input(self, *args, **kwargs)
+  File "C:\Users\Dell\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\lumibot\strategies\strategy_executor.py", line 87, in func_output
+    return func_input(self, *args, **kwargs)
+  File "C:\Users\Dell\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\lumibot\strategies\strategy_executor.py", line 378, in _on_trading_iteration
+    on_trading_iteration()
+  File "C:\Users\Dell\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\lumibot\tools\decorators.py", line 62, in func_output
+    frame, result = call_function_get_frame(func_input, *args, **kwargs)
+  File "C:\Users\Dell\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\lumibot\tools\decorators.py", line 30, in call_function_get_frame
+    result = func(*args, **kwargs)
+  File "C:\Users\Dell\Documents\GitHub\bastard\bastard.py", line 136, in on_trading_iteration
+    moving_average = self.calculate_moving_average(50)
+  File "C:\Users\Dell\Documents\GitHub\bastard\bastard.py", line 122, in calculate_moving_average
+    bars = self.get_bars('SPU', '1DAY', start_date, end_date, days)
+  File "C:\Users\Dell\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\lumibot\strategies\strategy.py", line 2982, in get_bars
+    return self.get_historical_prices_for_assets(
+  File "C:\Users\Dell\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\lumibot\strategies\strategy.py", line 2954, in get_historical_prices_for_assets
+    return self.broker.data_source.get_bars(
+  File "C:\Users\Dell\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\lumibot\data_sources\data_source.py", line 302, in get_bars
+    response = task.result()
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.10_3.10.3056.0_x64__qbz5n2kfra8p0\lib\concurrent\futures\_base.py", line 451, in result
+    return self.__get_result()
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.10_3.10.3056.0_x64__qbz5n2kfra8p0\lib\concurrent\futures\_base.py", line 403, in __get_result
+    raise self._exception
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.10_3.10.3056.0_x64__qbz5n2kfra8p0\lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "C:\Users\Dell\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\lumibot\data_sources\data_source.py", line 292, in <lambda>
+    func = lambda args, kwargs: self._pull_source_bars(*args, **kwargs)
+  File "C:\Users\Dell\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\lumibot\data_sources\yahoo_data.py", line 103, in _pull_source_bars
+    self._parse_source_timestep(timestep, reverse=True)
+  File "C:\Users\Dell\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\lumibot\data_sources\data_source.py", line 232, in _parse_source_timestep
+    raise UnavailabeTimestep(self.SOURCE, timestep)
+lumibot.data_sources.exceptions.UnavailabeTimestep: YAHOO data source does not have data with datetime.datetime(2023, 12, 5, 20, 43, 49, 302463) timestep
+
+2024-01-24 20:43:49,319: root: INFO: MLTrader : Executing the on_bot_crash event method
+2024-01-24 20:43:49,394: root: INFO: Backtesting finished
+2024-01-24 20:43:49,402: root: WARNING: Cannot plot returns because the strategy returns are missing
+2024-01-24 20:43:49,736: root: WARNING: Cannot create a tearsheet because the strategy returns are missing
+2024-01-24 20:43:49,736: backtest_stats: INFO: Backtest took 0:00:05.108487 for a speed of 0.000
