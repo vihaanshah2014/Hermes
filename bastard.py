@@ -12,6 +12,8 @@ from datetime import datetime
 # news api
 from alpaca_trade_api import REST
 from timedelta import Timedelta
+from datetime import timedelta  # Import timedelta from datetime module
+
 
 # importing AI
 from finbert_utils import estimate_sentiment
@@ -104,14 +106,21 @@ class MLTrader(Strategy):
 
         return probability_value
     
-
+    
     def calculate_moving_average(self, days: int):
         today = self.get_datetime()
-        start_date = today - Timedelta(days=days)
+        start_date = today - timedelta(days=days)  # Use timedelta to calculate start_date
         end_date = today.strftime('%Y-%m-%d')
-        start_date = start_date.strftime('%Y-%m-%d')
+
         # Fetch historical data for the given period
-        historical_data = self.api.get_barset(symbols=self.symbol, timeframe='day', limit=days).df[self.symbol]
+        historical_data = self.api.get_asset(
+            symbols=self.symbol,
+            timeframe='day',
+            start=start_date.strftime('%Y-%m-%d'),  # Format start_date as string
+            end=end_date,
+            limit=days
+        ).df[self.symbol]
+
         # Calculate the moving average
         total = sum([candle.close for candle in historical_data])
         moving_average = total / days
