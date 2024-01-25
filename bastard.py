@@ -109,8 +109,15 @@ class MLTrader(Strategy):
     
     
     def calculate_moving_average(self, days: int):
+        symbol = 'SPY'
         
-        #use yfinance
+        # Fetch historical data using yfinance
+        data = yf.download(symbol, start=start_date, end=end_date)
+        close_prices = data['Close']
+
+        # Calculate the moving average
+        moving_average = close_prices.rolling(window=days).mean().iloc[-1]
+        
         return moving_average
 
 
