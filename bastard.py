@@ -108,17 +108,24 @@ class MLTrader(Strategy):
         return probability_value
     
     
-    def calculate_moving_average(self, days: int):
-        symbol = 'SPY'
-        
-        # Fetch historical data using yfinance
+
+
+    def calculate_moving_average(self, symbol: str, days: int):
+        end_date = self.get_datetime()
+        try:
+            start_date = end_date - pd.DateOffset(days=days)
+        except Exception as e:
+            print(f"Error occurred while calculating start date: {e}")
+            start_date = end_date - pd.Timedelta(days=days)
+
         data = yf.download(symbol, start=start_date, end=end_date)
         close_prices = data['Close']
-
-        # Calculate the moving average
         moving_average = close_prices.rolling(window=days).mean().iloc[-1]
-        
+
         return moving_average
+
+
+
 
 
 
@@ -127,14 +134,15 @@ class MLTrader(Strategy):
         CASH_MINIMUM = 1000
         probability_value = self.get_probability_value()
         cash, last_price, quantity = self.position_sizing()
-        moving_average = self.calculate_moving_average(50)
+        # moving_average = self.calculate_moving_average(self.symbol, 50)
+        moving_average = last_price
 
 
 
         probability, sentiment = self.get_sentiment()
 
         if cash > last_price and cash > CASH_MINIMUM:
-            if last_price < moving_average and sentiment == "positive" and probability > probability_value:
+            if last_price <= moving_average and sentiment == "positive" and probability > probability_value:
                 min_val, max_val = self.risk_values(probability=probability, buy=True)
                 if self.last_trade == "sell":
                     self.sell_all()
@@ -148,7 +156,7 @@ class MLTrader(Strategy):
                 )
                 self.submit_order(order)
                 self.last_trade = "buy"
-            elif last_price > moving_average and sentiment == "negative" and probability > probability_value: 
+            elif last_price >= moving_average and sentiment == "negative" and probability > probability_value: 
                 min_val, max_val = self.risk_values(probability=probability, buy=False)
                 if self.last_trade == "buy":
                         self.sell_all()
@@ -165,7 +173,7 @@ class MLTrader(Strategy):
 
 
 start_date = datetime(2024,1,15)
-end_date = datetime(2024,1,23)
+end_date = datetime(2024,1,24)
 broker = Alpaca(ALPACA_CREDS)
 
 strategy = MLTrader(name='bastardv1', 
