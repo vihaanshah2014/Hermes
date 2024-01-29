@@ -15,6 +15,8 @@ from alpaca_trade_api import REST
 from timedelta import Timedelta
 from datetime import timedelta  # Import timedelta from datetime module
 import numpy as np
+from textblob import TextBlob
+
 
 
 
@@ -64,14 +66,38 @@ class MLTrader(Strategy):
         return today.strftime('%Y-%m-%d'), three_days_prior.strftime('%Y-%m-%d')
 
     
+
     def get_sentiment(self):
-        today, three_days_prior = self.get_dates()
-        news = self.api.get_news(symbol=self.symbol, start=three_days_prior, end=today)
+            today, three_days_prior = self.get_dates()
+            news = self.api.get_news(symbol=self.symbol, start=three_days_prior, end=today)
 
-        news = [ev.__dict__["_raw"]["headline"] for ev in news]
+            news = [ev.__dict__["_raw"]["headline"] for ev in news]
 
-        probability, sentiment = estimate_sentiment(news)
-        return probability, sentiment
+            sentiments = [TextBlob(new).sentiment.polarity for new in news]
+
+            sentiment = np.average(sentiments)
+            sentiment = 'positive' if sentiment > 0 else 'negative'
+            
+            return sentiment
+
+    
+
+    
+    def calculate_volatility(self, symbol, days):
+            end_date = self.get_datetime()
+            try:
+                start_date = end_date - pd.DateOffset(days=days)
+            except Exception as e:
+                print(f"Error occurred while calculating start date: {e}")
+                start_date = end_date - pd.Timedelta(days=days)
+
+            data = yf.download(symbol, start=start_date, end=end_date)
+            close_prices = data['Close']
+            log_returns = np.log(close_prices / close_prices.shift(1))
+            volatility = log_returns.std() * np.sqrt(days)
+            
+            return volatility
+
 
 
 
@@ -152,12 +178,14 @@ class MLTrader(Strategy):
         moving_average = last_price
 
 
+        volatility = self.calculate_volatility(self.symbol, 14)
+        sentiment = self.get_sentiment()
 
         probability, sentiment = self.get_sentiment()
 
         if cash > last_price and cash > CASH_MINIMUM:
             if last_price <= moving_average and sentiment == "positive" and probability > probability_value:
-                min_val, max_val = self.risk_values(probability=probability, buy=True)
+                min_val, max_val = self.risk_values(probability=probability, volatility=volatility, sentiment=sentiment, buy=True)
                 if self.last_trade == "sell":
                     self.sell_all()
                 order = self.create_order(
@@ -171,7 +199,7 @@ class MLTrader(Strategy):
                 self.submit_order(order)
                 self.last_trade = "buy"
             elif last_price >= moving_average and sentiment == "negative" and probability > probability_value: 
-                min_val, max_val = self.risk_values(probability=probability, buy=False)
+                min_val, max_val = self.risk_values(probability=probability, volatility=volatility, sentiment=sentiment, buy=False)
                 if self.last_trade == "buy":
                         self.sell_all()
                 order = self.create_order(
