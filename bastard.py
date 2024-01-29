@@ -77,11 +77,17 @@ class MLTrader(Strategy):
 
 
     def risk_values(self, probability, buy=True):
-        base_cash = 100000 # Set the base cash value
+        base_cash = 100000  # Set the base cash value
         cash = self.get_cash()
 
         asset_volatility = self.calculate_volatility(self.symbol, lookback=14)
-        risk_tolerance = 0.02 # a constant that you can adjust based on a user's risk tolerance
+        
+        # Check if asset_volatility is None, and handle the case appropriately
+        if asset_volatility is None:
+            print("Unable to calculate volatility. Skipping trade.")
+            asset_volatility = 0.1
+
+        risk_tolerance = 0.02  # a constant that you can adjust based on a user's risk tolerance
         volatility_adjustment_factor = asset_volatility * risk_tolerance
 
         if cash < base_cash:
@@ -104,6 +110,7 @@ class MLTrader(Strategy):
             max_value *= 1.1
 
         return min_value, max_value
+
     
 
     def calculate_volatility(self, symbol, lookback=14):

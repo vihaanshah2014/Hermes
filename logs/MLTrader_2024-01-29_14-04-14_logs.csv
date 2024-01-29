@@ -1,0 +1,45 @@
+2024-01-29 14:04:14,820: root: INFO: MLTrader : Executing the initialize lifecycle method
+2024-01-29 14:04:17,476: root: INFO: Current backtesting datetime 2024-01-16 08:30:00-05:00
+2024-01-29 14:04:17,477: root: INFO: MLTrader : Executing the before_market_opens lifecycle method
+2024-01-29 14:04:17,479: root: INFO: Current backtesting datetime 2024-01-16 09:30:00-05:00
+2024-01-29 14:04:17,479: root: INFO: MLTrader : Executing the before_starting_trading lifecycle method
+2024-01-29 14:04:17,481: root: INFO: [34mMLTrader : Executing the on_trading_iteration lifecycle method at 2024-01-29 14:04:17[0m
+2024-01-29 14:04:17,486: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-01-29 14:04:17,498: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-01-29 14:04:20,476: root: ERROR: 0.0 is not a valid price. take_profit_price must be positive float.
+2024-01-29 14:04:20,545: root: ERROR: Traceback (most recent call last):
+  File "C:\Users\Dell\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\lumibot\strategies\strategy_executor.py", line 829, in run
+    self._run_trading_session()
+  File "C:\Users\Dell\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\lumibot\strategies\strategy_executor.py", line 780, in _run_trading_session
+    self._on_trading_iteration()
+  File "C:\Users\Dell\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\lumibot\strategies\strategy_executor.py", line 274, in func_output
+    result = func_input(self, *args, **kwargs)
+  File "C:\Users\Dell\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\lumibot\strategies\strategy_executor.py", line 298, in func_output
+    result = func_input(self, *args, **kwargs)
+  File "C:\Users\Dell\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\lumibot\strategies\strategy_executor.py", line 87, in func_output
+    return func_input(self, *args, **kwargs)
+  File "C:\Users\Dell\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\lumibot\strategies\strategy_executor.py", line 378, in _on_trading_iteration
+    on_trading_iteration()
+  File "C:\Users\Dell\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\lumibot\tools\decorators.py", line 62, in func_output
+    frame, result = call_function_get_frame(func_input, *args, **kwargs)
+  File "C:\Users\Dell\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\lumibot\tools\decorators.py", line 30, in call_function_get_frame
+    result = func(*args, **kwargs)
+  File "C:\Users\Dell\Documents\GitHub\bastard\bastard.py", line 196, in on_trading_iteration
+    order = self.create_order(
+  File "C:\Users\Dell\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\lumibot\strategies\strategy.py", line 618, in create_order
+    order = Order(
+  File "C:\Users\Dell\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\lumibot\entities\order.py", line 249, in __init__
+    self._set_type(
+  File "C:\Users\Dell\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\lumibot\entities\order.py", line 394, in _set_type
+    self.take_profit_price = check_price(take_profit_price, "take_profit_price must be positive float.")
+  File "C:\Users\Dell\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\lumibot\tools\types.py", line 73, in check_price
+    result = check_numeric(price, float, error_message, strict=True, nullable=nullable)
+  File "C:\Users\Dell\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\lumibot\tools\types.py", line 21, in check_numeric
+    raise error
+ValueError: 0.0 is not a valid price. take_profit_price must be positive float.
+
+2024-01-29 14:04:20,555: root: INFO: MLTrader : Executing the on_bot_crash event method
+2024-01-29 14:04:20,586: root: INFO: Backtesting finished
+2024-01-29 14:04:20,589: root: WARNING: Cannot plot returns because the strategy returns are missing
+2024-01-29 14:04:20,758: root: WARNING: Cannot create a tearsheet because the strategy returns are missing
+2024-01-29 14:04:20,758: backtest_stats: INFO: Backtest took 0:00:05.950195 for a speed of 0.000
