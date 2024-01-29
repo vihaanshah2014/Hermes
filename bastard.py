@@ -16,6 +16,7 @@ from timedelta import Timedelta
 from datetime import timedelta  # Import timedelta from datetime module
 import numpy as np
 from pandas_datareader import data as web
+import os
 
 
 
@@ -25,6 +26,7 @@ from finbert_utils import estimate_sentiment
 
 API_KEY = "PKPQ89WRWLU05IA5JK52"
 API_SECRET = "4eKdigiTzaQNoKsgPnG6G5dlVjzAz91f9dKxTZBJ"
+os.environ["ALPHAVANTAGE_API_KEY"] = "VGLCCAJRPMIG9LV3"
 BASE_URL = "https://paper-api.alpaca.markets"
 
 ALPACA_CREDS = {
@@ -114,15 +116,20 @@ class MLTrader(Strategy):
     
 
     def calculate_volatility(self, symbol, lookback=14):
-        try:
-            df = web.DataReader(symbol, 'yahoo', start='01-01-2010')['Adj Close']
-            returns = df.pct_change()
-            rolling_std = returns.rolling(window=lookback).std()
-            volatility = rolling_std * np.sqrt(lookback)
-            return volatility.iloc[-1]
-        except Exception as e:
-            print(f"Error occurred while fetching data from Yahoo Finance: {e}")
-            return None
+        f = web.DataReader(symbol, "av-daily", start=datetime(2017, 2, 9),
+                        end=datetime(2017, 5, 24),
+                        api_key=os.getenv('ALPHAVANTAGE_API_KEY'))
+        # calculate daily returns
+        f['return'] = f['close'].pct_change()
+        # calculate rolling standard deviation of returns
+        f['volatility'] = f['return'].rolling(window=lookback).std()
+        # Latest Volatility as a decimal
+        volatility = f['volatility'].iloc[-1]
+        
+        return volatility
+    
+
+
 
     
 
