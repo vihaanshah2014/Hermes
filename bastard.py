@@ -14,6 +14,8 @@ from datetime import datetime
 from alpaca_trade_api import REST
 from timedelta import Timedelta
 from datetime import timedelta  # Import timedelta from datetime module
+import numpy as np
+
 
 
 # importing AI
@@ -73,14 +75,26 @@ class MLTrader(Strategy):
 
 
 
-    def risk_values(self, probability, buy=True):
-        base_cash = 100000  # Set the base cash value
+    def risk_values(self, probability, volatility, sentiment, buy=True):
+        base_cash = 100000 # Set the base cash value
         cash = self.get_cash()
 
+        historical_data = self.get_historical_data(self.symbol, lookback=14)
+        twenty_days_sma = historical_data['Close'].rolling(window=20).mean()[-1]
+        last_closing_price = self.get_last_price(self.symbol)
+
+        trend_factor = last_closing_price / twenty_days_sma
+
+        volatility_factor = np.sqrt(volatility)
+        
+        sentiment_factor = 1 if sentiment == 'positive' else 0.5
+
         if cash < base_cash:
-            adjustment_factor = max(0.5, cash / base_cash)
+            cash_factor = max(0.5, cash / base_cash)
         else:
-            adjustment_factor = 1
+            cash_factor = 1
+
+        adjustment_factor = cash_factor * trend_factor * volatility_factor * sentiment_factor
 
         if buy:
             min_value = 0.95 * adjustment_factor
@@ -173,7 +187,7 @@ class MLTrader(Strategy):
 
 
 start_date = datetime(2024,1,15)
-end_date = datetime(2024,1,24)
+end_date = datetime(2024,1,29)
 broker = Alpaca(ALPACA_CREDS)
 
 strategy = MLTrader(name='bastardv1', 
