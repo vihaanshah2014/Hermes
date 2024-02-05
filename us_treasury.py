@@ -29,7 +29,7 @@ def scrape(url):
 
 # Main execution function
 def main():    
-    url = 'https://www.treasury.gov/resource-center/data-chart-center/interest-rates/Pages/TextView.aspx?data=yield'
+    url = 'https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_real_long_term&field_tdr_date_value_month=202402'
     response = scrape(url)
 
     if response:
@@ -45,6 +45,8 @@ def main():
             # ... further processing
         else:
             print("The expected table was not found on the page.")
+            print(tables[0])
+
             # Maybe handle the problem or exit
 
 
@@ -66,3 +68,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
