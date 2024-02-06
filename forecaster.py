@@ -1,24 +1,38 @@
-
-# Raw data with actual sales
+# Step 1: Input the raw sales data
 sales_data = """
-January 2022 140,240
-February 2022 116,554
-March 2022 78,225
-April 2022 63,053
-May 2022 17,467
-June 2022 122,405
-July 2022 16,975
-August 2022 41,862
-September 2022 57,281
-October 2022 73,815
-November 2022 33,786
-December 2022 79,837
+July 2022 87,840
+August 2022 27,882
+September 2022 135,411
+October 2022 47,673
+November 2022 124,014
+December 2022 59,580
 """
 
+print("Step 2: Splitting the data into lines for each month.")
+lines = sales_data.strip().split("\n")
+for line in lines:
+    print(line)
+
+print("\nStep 3 & 4: Extracting and converting sales numbers into integers.")
 # Extract numbers and convert them to integers, removing commas
-sales_values = [int(line.split()[-1].replace(",", "")) for line in sales_data.strip().split("\n")]
+sales_values = []
+for line in lines:
+    # Extract the last element after splitting and remove commas
+    number_str = line.split()[-1].replace(",", "")
+    # Convert to integer
+    number = int(number_str)
+    sales_values.append(number)
+    print(f"Converted {number_str} to {number}")
 
+print("\nStep 5: Calculating the sum of all sales with a running total.")
+total_sales = 0
+for index, value in enumerate(sales_values):
+    total_sales += value
+    print(f"Adding {value}: Running sum is {total_sales}")
+
+print(f"\nTotal sales for the year: {total_sales}")
+
+print("\nStep 6: Calculating average sales.")
 # Calculate average sales
-average_sales = sum(sales_values) / 12
-
-print("The average monthly sales for the year 2022 is: {:.2f}".format(average_sales))
+average_sales = total_sales / 6
+print(f"The average monthly sales for the year 2022 is: {average_sales:.2f}")
