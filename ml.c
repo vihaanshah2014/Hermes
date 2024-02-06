@@ -20,3 +20,31 @@ void freeMatrix(double **matrix, int rows){
     }
     free(matrix);
 }
+
+//Gauss Jorden Elimincation to compute the inverse of a matrix
+
+void matrixInverse(double **a, int n, double **inverse){
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < n; j++){
+            inverse[i][j] = (i == j) ? 1 : 0;
+        }
+    }
+
+    for(int i = 0; i < n; i++){
+        double pivot = a[i][i];
+        for(int j = 0; j < n; j++){
+            a[i][j] /= pivot;
+            inverse[i][j] /= pivot;
+        }
+        for(int j = 0; j < n; j++){
+            if(i != j){
+                double factor = a[j][i];
+                for(int k = 0; k < n; k++){
+                    a[j][k] -= factor * a[i][k];
+                    inverse[j][k] -= factor * inverse[i][k];
+                }
+            }
+        }
+    }
+
+}
