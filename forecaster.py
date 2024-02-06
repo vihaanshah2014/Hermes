@@ -1,38 +1,36 @@
-# Step 1: Input the raw sales data
-sales_data = """
-July 2022 87,840
-August 2022 27,882
-September 2022 135,411
-October 2022 47,673
-November 2022 124,014
-December 2022 59,580
-"""
+def weighted_moving_average(sales_data, weights):
+    print("Calculating the Weighted Moving Average...\n")
 
-print("Step 2: Splitting the data into lines for each month.")
-lines = sales_data.strip().split("\n")
-for line in lines:
-    print(line)
+    # Reverse the sales data to start with the most recent month
+    reversed_sales = sales_data[::-1]
+    detailed_work = []
 
-print("\nStep 3 & 4: Extracting and converting sales numbers into integers.")
-# Extract numbers and convert them to integers, removing commas
-sales_values = []
-for line in lines:
-    # Extract the last element after splitting and remove commas
-    number_str = line.split()[-1].replace(",", "")
-    # Convert to integer
-    number = int(number_str)
-    sales_values.append(number)
-    print(f"Converted {number_str} to {number}")
+    # Calculate the weighted moving average
+    weighted_values = [sales * weight for sales, weight in zip(sales_data, weights)]
+    
+    for sales, weight, weighted_value in zip(sales_data, weights, weighted_values):
+        line = f"{weight} * {sales} (weight for month * sales for month) = {weighted_value}"
+        detailed_work.append(line)
+        print(line)
+    
+    forecast = sum(weighted_values)
+    return forecast, detailed_work
 
-print("\nStep 5: Calculating the sum of all sales with a running total.")
-total_sales = 0
-for index, value in enumerate(sales_values):
-    total_sales += value
-    print(f"Adding {value}: Running sum is {total_sales}")
+# Sales data for the last 6 months of 2022
+sales_data = [
+    73820,   # October 2022
+    33780,   # November 2022
+    79830,   # December 2022
+]
 
-print(f"\nTotal sales for the year: {total_sales}")
+# Weights for the corresponding months
+weights = [
+    0.10,  # 3 months prior
+    0.30,  # 2 months prior
+    0.60,  # Previous month
+]
 
-print("\nStep 6: Calculating average sales.")
-# Calculate average sales
-average_sales = total_sales / 6
-print(f"The average monthly sales for the year 2022 is: {average_sales:.2f}")
+# Calculate the forecast for January 2023
+forecast, detailed_work = weighted_moving_average(sales_data, weights)
+
+print(f"\nForecast for January 2023: {forecast:.2f}")
