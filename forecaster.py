@@ -1,4 +1,3 @@
-python
 # Define the actual sales and forecast lists
 actual_sales = [4035, 4335, 4410, 4170, 4020, 4035, 3900, 4143, 6456, 6942, 7056, 6672]
 forecast = [4320, 4305, 4080, 4470, 4410, 4050, 3585, 4131, 6732, 6888, 6708, 7137]
