@@ -50,6 +50,16 @@ forecast_data.update(calculate_forecast(sales_data, method='MAD'))
 print(sales_data)
 print(forecast_data)
 
+# # In the above code, `parse_input_data()` processes the input text to populate `sales
+# _data` and `forecast_data` dictionaries with the actual sales and forecast data, re
+# spectively. The `??,???` is maintained as-is until you implement a forecasting function 
+# to compute the values. The function `calculate_forecast()` is currently a placeholder for 
+# the actual forecasting method. You would need to replace `'??,???'` with the appropriate fore
+# cast value after calculating MAD or WMA.
+
+# # To call these functions, the code will expect standard input. To
+#  test from a file, you could run the Python script and redirect the file content 
+# to the script's standard input using a command like:
 
 # bash
 # python script.py < input.txt
