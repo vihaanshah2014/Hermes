@@ -51,3 +51,5 @@ print(sales_data)
 print(forecast_data)
 
 
+# bash
+# python script.py < input.txt
