@@ -13,3 +13,10 @@ double** allocateMatrix(int rows, int cols){
 
     return matrix;
 }
+
+void freeMatrix(double **matrix, int rows){
+    for(int i = 0; i < rows; i++){
+        free(matrix[i]);
+    }
+    free(matrix);
+}
