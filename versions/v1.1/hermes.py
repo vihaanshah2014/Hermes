@@ -48,7 +48,7 @@ model.add(Dropout(0.2))
 model.add(Dense(units=1)) #Prediction of closing value
 
 model.compile(optimizer='adam', loss='mean_squared_error')
-model.fit(x_train, y_train, epochs=25, batch_size=32)
+model.fit(x_train, y_train, epochs=2, batch_size=32)
 
 
 # BackTesting Model to improve
@@ -146,31 +146,43 @@ def scrape_treasury_data_for_period(start, end):
 # Adjust your start and end dates here to match your desired range for treasury rates
 treasury_data = scrape_treasury_data_for_period(test_start, test_end)
 
+treasury_data_filtered = treasury_data[['Date', 'LT Real Average (10> Yrs)']].dropna()
+treasury_data_filtered['MA_Treasury_Rates'] = treasury_data_filtered['LT Real Average (10> Yrs)'].rolling(window=5).mean()
 
 # Assuming 'LT Real Average (10> Yrs)' is the correct column based on the CSV data you provided
 if treasury_data is not None:
-    treasury_data_filtered = treasury_data[['Date', 'LT Real Average (10> Yrs)']].dropna()
+    # Setup for subplot: 2 rows, 1 column
+    fig, axs = plt.subplots(2, 1, figsize=(14, 14))
 
-    # Plotting corrected:
-    plt.figure(figsize=(14, 7))
-    plt.plot(test_data.index, actual_prices, color="black", label="Actual Price")
-    plt.plot(test_data.index, predicted_prices, color="green", label="Predicted Price")
+    # Plot Actual and Predicted Prices on the first subplot
+    axs[0].plot(test_data.index, actual_prices, color="black", label="Actual Price")
+    axs[0].plot(test_data.index, predicted_prices, color="green", label="Predicted Price")
 
-    # Ensure there's data for plotting
+    # Plot Treasury Rates as Red Dots on the same subplot for context
+
+    
+    for i, row in treasury_data_filtered.iterrows():
+        if row['Date'] in test_data.index:
+            stock_price = test_data.loc[row['Date']]['Close']
+            axs[0].plot(row['Date'], stock_price, 'ro', label='Treasury Rate' if i == 0 else "")
+            axs[0].text(row['Date'], stock_price, f"{row['LT Real Average (10> Yrs)']}%", verticalalignment='bottom', horizontalalignment='center', color='blue', fontsize=8)
+
+    axs[0].set_title(f"{company} Share Price with Treasury Rates")
+    axs[0].set_xlabel('Date')
+    axs[0].set_ylabel('Price')
+    axs[0].legend()
+
+    # Plot Treasury Rates and Moving Average on the second subplot
     if not treasury_data_filtered.empty:
-        for i, row in treasury_data_filtered.iterrows():
-            # Check if the date exists in the test data
-            if row['Date'] in test_data.index:
-                stock_price = test_data.loc[row['Date']]['Close']
-                plt.plot(row['Date'], stock_price, 'ro')  # Plot a red dot at the stock price
-                plt.text(row['Date'], stock_price, f"{row['LT Real Average (10> Yrs)']}%", verticalalignment='bottom', horizontalalignment='center', color='blue', fontsize=8)
-    else:
-        print("No treasury data available for plotting.")
+        axs[1].plot(treasury_data_filtered['Date'], treasury_data_filtered['LT Real Average (10> Yrs)'], 'ro-', label='Treasury Rate')
+        axs[1].plot(treasury_data_filtered['Date'], treasury_data_filtered['MA_Treasury_Rates'], color='blue', linestyle='--', label='MA Treasury Rates')
 
-    plt.title(f"{company} Share Price vs. Treasury Rate")
-    plt.xlabel('Date')
-    plt.ylabel('Price')
-    plt.legend()
+    axs[1].set_title(f"Treasury Rates and Moving Average")
+    axs[1].set_xlabel('Date')
+    axs[1].set_ylabel('Rate (%)')
+    axs[1].legend()
+
+    plt.tight_layout()
     plt.show()
 else:
     print("Failed to fetch treasury rates or no data available.")
