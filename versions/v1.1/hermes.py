@@ -107,82 +107,10 @@ else:
 
 #Adding plots at the end
 #Plot The Tests
-# plt.plot(actual_prices, color="black", label=f"Actual Price")
-# plt.plot(predicted_prices, color="green", label=f"Predicted Price")
-# plt.title(f"{company} Share Price")
-# plt.xlabel('Time')
-# plt.ylabel(f'{company} Share Price')
-# plt.legend()
-# plt.show()
-
-
-def generate_monthly_urls(start, end):
-    current = start
-    urls = []
-    while current <= end:
-        month_str = current.strftime('%Y%m')
-        url = f'https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_real_long_term&field_tdr_date_value_month={month_str}'
-        urls.append(url)
-        current += relativedelta(months=1)
-    return urls
-
-def scrape_treasury_data_for_period(start, end):
-    urls = generate_monthly_urls(start, end)
-    all_data = []
-    for url in urls:
-        try:
-            response = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'})
-            response.raise_for_status()
-            soup = BeautifulSoup(response.content, 'html.parser')
-            tables = soup.findAll('table')
-            if tables:
-                data = pd.read_html(str(tables[0]))[0]
-                data['Date'] = pd.to_datetime(data.iloc[:, 0], errors='coerce')
-                all_data.append(data)
-        except Exception as e:
-            print(f"An error occurred while fetching {url}: {e}")
-    return pd.concat(all_data).drop_duplicates().reset_index(drop=True)
-
-# Adjust your start and end dates here to match your desired range for treasury rates
-treasury_data = scrape_treasury_data_for_period(test_start, test_end)
-
-treasury_data_filtered = treasury_data[['Date', 'LT Real Average (10> Yrs)']].dropna()
-treasury_data_filtered['MA_Treasury_Rates'] = treasury_data_filtered['LT Real Average (10> Yrs)'].rolling(window=5).mean()
-
-# Assuming 'LT Real Average (10> Yrs)' is the correct column based on the CSV data you provided
-if treasury_data is not None:
-    # Setup for subplot: 2 rows, 1 column
-    fig, axs = plt.subplots(2, 1, figsize=(14, 14))
-
-    # Plot Actual and Predicted Prices on the first subplot
-    axs[0].plot(test_data.index, actual_prices, color="black", label="Actual Price")
-    axs[0].plot(test_data.index, predicted_prices, color="green", label="Predicted Price")
-
-    # Plot Treasury Rates as Red Dots on the same subplot for context
-
-    
-    for i, row in treasury_data_filtered.iterrows():
-        if row['Date'] in test_data.index:
-            stock_price = test_data.loc[row['Date']]['Close']
-            axs[0].plot(row['Date'], stock_price, 'ro', label='Treasury Rate' if i == 0 else "")
-            axs[0].text(row['Date'], stock_price, f"{row['LT Real Average (10> Yrs)']}%", verticalalignment='bottom', horizontalalignment='center', color='blue', fontsize=8)
-
-    axs[0].set_title(f"{company} Share Price with Treasury Rates")
-    axs[0].set_xlabel('Date')
-    axs[0].set_ylabel('Price')
-    axs[0].legend()
-
-    # Plot Treasury Rates and Moving Average on the second subplot
-    if not treasury_data_filtered.empty:
-        axs[1].plot(treasury_data_filtered['Date'], treasury_data_filtered['LT Real Average (10> Yrs)'], 'ro-', label='Treasury Rate')
-        axs[1].plot(treasury_data_filtered['Date'], treasury_data_filtered['MA_Treasury_Rates'], color='blue', linestyle='--', label='MA Treasury Rates')
-
-    axs[1].set_title(f"Treasury Rates and Moving Average")
-    axs[1].set_xlabel('Date')
-    axs[1].set_ylabel('Rate (%)')
-    axs[1].legend()
-
-    plt.tight_layout()
-    plt.show()
-else:
-    print("Failed to fetch treasury rates or no data available.")
+plt.plot(actual_prices, color="black", label=f"Actual Price")
+plt.plot(predicted_prices, color="green", label=f"Predicted Price")
+plt.title(f"{company} Share Price")
+plt.xlabel('Time')
+plt.ylabel(f'{company} Share Price')
+plt.legend()
+plt.show()
