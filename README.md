@@ -1,6 +1,6 @@
-# [B.A.S.T.A.R.D - Boldly Analyzing and Strategizing Trade Algorithm for Radical Dividends](https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.quora.com%2FHow-would-a-moving-3D-shadow-of-a-4D-object-look-like&psig=AOvVaw3juxNEY9AqHqj_g6gA5MKK&ust=1706731863656000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCICp7eX1hYQDFQAAAAAdAAAAABAw)
+# [H.E.R.M.E.S. - High-frequency Execution and Risk Management Engine for Multi-asset Strategies](https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.quora.com%2FHow-would-a-moving-3D-shadow-of-a-4D-object-look-like&psig=AOvVaw3juxNEY9AqHqj_g6gA5MKK&ust=1706731863656000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCICp7eX1hYQDFQAAAAAdAAAAABAw)
 
-The Bastard trading algorithm stands as a testament to innovation in the financial technology sector, employing a distinctive programming technique that leverages Object-oriented principles for a comprehensive evaluation of each company. In this paradigm, every company is considered a three-dimensional object, echoing the intricacies of the modern world. This object representation encapsulates vital dimensions, offering a nuanced perspective for in-depth analysis.
+The Hermes trading algorithm stands as a testament to innovation in the financial technology sector, employing a distinctive programming technique that leverages Object-oriented principles for a comprehensive evaluation of each company. In this paradigm, every company is considered a three-dimensional object, echoing the intricacies of the modern world. This object representation encapsulates vital dimensions, offering a nuanced perspective for in-depth analysis.
 
 ## Dimensions of Analysis
 
