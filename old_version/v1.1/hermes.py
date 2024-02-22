@@ -1,3 +1,5 @@
+# H.E.R.M.E.S. - High-frequency Execution and Risk Management Engine for Multi-asset Strategies
+
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
