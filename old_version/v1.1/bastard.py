@@ -50,7 +50,7 @@ model.fit(x_train, y_train, epochs=25, batch_size=32)
 # BackTesting Model to improve
 
 #Load Test Data
-test_start = dt.datetime(2020,1,1)
+test_start = dt.datetime(2019,11, 1)
 test_end = dt.datetime(2020,4, 22)
 
 test_data = yf.download(company, start=test_start, end=test_end)
@@ -73,6 +73,35 @@ x_test = np.reshape(x_test, (x_test.shape[0], x_test.shape[1], 1))
 predicted_prices = model.predict(x_test)
 predicted_prices = scaler.inverse_transform(predicted_prices)
 
+
+
+#Predict Next Day
+real_data = [model_inputs[len(model_inputs) + 1 - prediction_days:len(model_inputs + 1), 0]]
+real_data = np.array(real_data)
+real_data = np.reshape(real_data, (real_data.shape[0], real_data.shape[1], 1))
+
+# print(scaler.inverse_transform(real_data[-1]))
+
+prediction = model.predict(real_data)
+prediction = scaler.inverse_transform(prediction)
+print(f"Prediction : {prediction}")
+
+# Assuming NEXT_DAY is the day after test_end
+next_day = dt.datetime(2020, 4, 23)  # Example date, replace with actual next day
+next_day_data = yf.download(company, start=next_day, end=next_day + dt.timedelta(days=1))
+actual_next_day_price = next_day_data['Close'].values[0] if not next_day_data.empty else None
+
+# Check if we got the next day's data
+if actual_next_day_price is not None:
+    print(f"Actual next day price: {actual_next_day_price}")
+    # Calculate the percentage difference between actual and predicted price
+    prediction_accuracy = 100 - (abs(actual_next_day_price - prediction) / actual_next_day_price) * 100
+    print(f"Prediction accuracy: {prediction_accuracy}%")
+else:
+    print("Could not retrieve next day's price. Please check the date and try again.")
+
+
+#Adding plots at the end
 #Plot The Tests
 plt.plot(actual_prices, color="black", label=f"Actual Price")
 plt.plot(predicted_prices, color="green", label=f"Predicted Price")
