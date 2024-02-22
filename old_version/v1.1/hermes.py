@@ -14,8 +14,8 @@ from tensorflow.keras.layers import Dense, Dropout, LSTM
 #Load Data
 company = 'AMZN'
 
-start = dt.datetime(2012,1,1)
-end = dt.datetime(2020,1,1)
+start = dt.datetime(2016,1,1)
+end = dt.datetime(2024,1,1)
 
 data = yf.download(company, start=start, end=end)
 
@@ -52,8 +52,8 @@ model.fit(x_train, y_train, epochs=25, batch_size=32)
 # BackTesting Model to improve
 
 #Load Test Data
-test_start = dt.datetime(2019,11, 1)
-test_end = dt.datetime(2020,4, 22)
+test_start = dt.datetime(2023,11, 1)
+test_end = dt.datetime.now()
 
 test_data = yf.download(company, start=test_start, end=test_end)
 actual_prices = test_data['Close'].values
