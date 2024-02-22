@@ -3,16 +3,18 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
-# import pandas_datareader as web
+import requests
 import yfinance as yf
 import datetime as dt
 
+from bs4 import BeautifulSoup
+from dateutil.relativedelta import relativedelta
 from sklearn.preprocessing import MinMaxScaler
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, LSTM
 
 #Load Data
-company = 'AMZN'
+company = 'SPY'
 
 start = dt.datetime(2016,1,1)
 end = dt.datetime(2024,1,1)
@@ -53,7 +55,7 @@ model.fit(x_train, y_train, epochs=25, batch_size=32)
 
 #Load Test Data
 test_start = dt.datetime(2023,11, 1)
-test_end = dt.datetime.now()
+test_end = dt.datetime(2024, 2, 21)
 
 test_data = yf.download(company, start=test_start, end=test_end)
 actual_prices = test_data['Close'].values
@@ -89,7 +91,7 @@ prediction = scaler.inverse_transform(prediction)
 print(f"Prediction : {prediction}")
 
 # Assuming NEXT_DAY is the day after test_end
-next_day = dt.datetime(2020, 4, 23)  # Example date, replace with actual next day
+next_day = dt.datetime.now()  # Example date, replace with actual next day
 next_day_data = yf.download(company, start=next_day, end=next_day + dt.timedelta(days=1))
 actual_next_day_price = next_day_data['Close'].values[0] if not next_day_data.empty else None
 
@@ -105,10 +107,70 @@ else:
 
 #Adding plots at the end
 #Plot The Tests
-plt.plot(actual_prices, color="black", label=f"Actual Price")
-plt.plot(predicted_prices, color="green", label=f"Predicted Price")
-plt.title(f"{company} Share Price")
-plt.xlabel('Time')
-plt.ylabel(f'{company} Share Price')
-plt.legend()
-plt.show()
+# plt.plot(actual_prices, color="black", label=f"Actual Price")
+# plt.plot(predicted_prices, color="green", label=f"Predicted Price")
+# plt.title(f"{company} Share Price")
+# plt.xlabel('Time')
+# plt.ylabel(f'{company} Share Price')
+# plt.legend()
+# plt.show()
+
+
+def generate_monthly_urls(start, end):
+    current = start
+    urls = []
+    while current <= end:
+        month_str = current.strftime('%Y%m')
+        url = f'https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_real_long_term&field_tdr_date_value_month={month_str}'
+        urls.append(url)
+        current += relativedelta(months=1)
+    return urls
+
+def scrape_treasury_data_for_period(start, end):
+    urls = generate_monthly_urls(start, end)
+    all_data = []
+    for url in urls:
+        try:
+            response = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'})
+            response.raise_for_status()
+            soup = BeautifulSoup(response.content, 'html.parser')
+            tables = soup.findAll('table')
+            if tables:
+                data = pd.read_html(str(tables[0]))[0]
+                data['Date'] = pd.to_datetime(data.iloc[:, 0], errors='coerce')
+                all_data.append(data)
+        except Exception as e:
+            print(f"An error occurred while fetching {url}: {e}")
+    return pd.concat(all_data).drop_duplicates().reset_index(drop=True)
+
+# Adjust your start and end dates here to match your desired range for treasury rates
+treasury_data = scrape_treasury_data_for_period(test_start, test_end)
+
+
+# Assuming 'LT Real Average (10> Yrs)' is the correct column based on the CSV data you provided
+if treasury_data is not None:
+    treasury_data_filtered = treasury_data[['Date', 'LT Real Average (10> Yrs)']].dropna()
+
+    # Plotting corrected:
+    plt.figure(figsize=(14, 7))
+    plt.plot(test_data.index, actual_prices, color="black", label="Actual Price")
+    plt.plot(test_data.index, predicted_prices, color="green", label="Predicted Price")
+
+    # Ensure there's data for plotting
+    if not treasury_data_filtered.empty:
+        for i, row in treasury_data_filtered.iterrows():
+            # Check if the date exists in the test data
+            if row['Date'] in test_data.index:
+                stock_price = test_data.loc[row['Date']]['Close']
+                plt.plot(row['Date'], stock_price, 'ro')  # Plot a red dot at the stock price
+                plt.text(row['Date'], stock_price, f"{row['LT Real Average (10> Yrs)']}%", verticalalignment='bottom', horizontalalignment='center', color='blue', fontsize=8)
+    else:
+        print("No treasury data available for plotting.")
+
+    plt.title(f"{company} Share Price vs. Treasury Rate")
+    plt.xlabel('Date')
+    plt.ylabel('Price')
+    plt.legend()
+    plt.show()
+else:
+    print("Failed to fetch treasury rates or no data available.")
