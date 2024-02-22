@@ -48,7 +48,7 @@ model.add(Dropout(0.2))
 model.add(Dense(units=1)) #Prediction of closing value
 
 model.compile(optimizer='adam', loss='mean_squared_error')
-model.fit(x_train, y_train, epochs=2, batch_size=32)
+model.fit(x_train, y_train, epochs=50, batch_size=32)
 
 
 # BackTesting Model to improve
