@@ -1,5 +1,4 @@
 # H.E.R.M.E.S. - High-frequency Execution and Risk Management Engine for Multi-asset Strategies
-
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -12,6 +11,7 @@ from dateutil.relativedelta import relativedelta
 from sklearn.preprocessing import MinMaxScaler
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, LSTM
+
 
 #Load Data
 company = 'SPY'
@@ -48,7 +48,7 @@ model.add(Dropout(0.2))
 model.add(Dense(units=1)) #Prediction of closing value
 
 model.compile(optimizer='adam', loss='mean_squared_error')
-model.fit(x_train, y_train, epochs=50, batch_size=32)
+model.fit(x_train, y_train, epochs=2, batch_size=32)
 
 
 # BackTesting Model to improve
