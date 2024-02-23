@@ -2,12 +2,18 @@ import os
 import numpy as np
 import pandas as pd
 import yfinance as yf
+import warnings
+import tensorflow as tf
 from flask import Flask, request, jsonify
 from sklearn.preprocessing import MinMaxScaler
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, LSTM
 import datetime as dt
 import matplotlib.pyplot as plt
+
+os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
+warnings.filterwarnings('ignore', category=DeprecationWarning)
+warnings.filterwarnings('ignore', category=UserWarning, message='Starting a Matplotlib GUI outside of the main thread will likely fail.')
 
 # Flask app definition
 app = Flask(__name__)
@@ -31,7 +37,7 @@ def predict():
     # Example hardcoded values for demonstration
     symbol = 'SPY'
     start_date = '2022-01-01'
-    end_date = '2023-01-01'
+    end_date = '2024-02-22'
     prediction_days = 60
 
     # Load and prepare data
@@ -80,14 +86,33 @@ def predict():
     actual_prices_trimmed = actual_prices[-len(predicted_prices):] # Ensure lengths match
     mape = np.mean(np.abs((actual_prices_trimmed - predicted_prices.flatten()) / actual_prices_trimmed)) * 100
 
-    # Return the results including actual prices and MAPE
-    return jsonify({
-        "success": True,
-        "message": "Prediction completed successfully",
-        "predicted_prices": predicted_prices.tolist(),
-        "actual_prices": actual_prices_trimmed.tolist(),
-        "accuracy_percentage": 100 - mape
-    })
+    # Adjusting for output: Get the last predicted price as the next day's prediction
+    predicted_price_next_day = predicted_prices[-1][0] if predicted_prices.size > 0 else None
+
+    # Adjusting for output: Get the last predicted price as the next day's prediction
+    predicted_price_next_day = float(predicted_prices[-1][0]) if predicted_prices.size > 0 else None  # Convert to Python float
+
+    # Convert the MAPE to a float as well
+    accuracy_percentage = float(100 - mape)  # Ensure this is a native Python float
+
+    prediction_date = dt.datetime.strptime(end_date, '%Y-%m-%d') + dt.timedelta(days=1)
+    prediction_date_str = prediction_date.strftime('%Y-%m-%d')  # Convert to string for JSON serialization
+
+
+    # Output the required information as an array
+    output = [
+        symbol,  # Stock ticker
+        start_date,  # Start date
+        end_date,  # End date
+        prediction_date_str,  # The day for which the prediction is made
+        predicted_price_next_day,  # Predicted Price for Next Day
+        accuracy_percentage,  # Percent Accuracy so far on trained data
+        "A Pixel Journey Creation"  # Custom message
+    ]
+
+    # Return the results as JSON
+    return jsonify(output)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
