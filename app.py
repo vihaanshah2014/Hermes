@@ -1,4 +1,5 @@
-# Importing necessary libraries
+# H.E.R.M.E.S. - High-frequency Execution and Risk Management Engine for Multi-asset Strategies
+# Currently uses HERMES ML algo
 import os
 import numpy as np
 import pandas as pd
@@ -10,7 +11,10 @@ from sklearn.preprocessing import MinMaxScaler
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, LSTM
 import datetime as dt
+from datetime import datetime, timedelta
 import matplotlib.pyplot as plt
+import json
+
 
 # Suppressing unnecessary warnings
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
@@ -38,10 +42,15 @@ def create_model(input_shape):
 @app.route('/')
 def predict():
     # Example hardcoded values for demonstration
-    symbol = 'SPY'
-    start_date = '2022-01-01'
-    end_date = '2024-02-22'
+    max_lookback_years = 8
     prediction_days = 60
+
+    start_date = (datetime.now() - timedelta(days=prediction_days * 50)).strftime('%Y-%m-%d')
+    eight_years_ago = (datetime.now() - timedelta(days=365 * max_lookback_years)).strftime('%Y-%m-%d')
+    start_date = max(start_date, eight_years_ago)
+    end_date = datetime.now().strftime('%Y-%m-%d')
+
+    symbol = 'SPY'
 
     # Load and prepare data
     data = yf.download(symbol, start=start_date, end=end_date)
@@ -100,19 +109,31 @@ def predict():
     prediction_date = dt.datetime.strptime(end_date, '%Y-%m-%d') + dt.timedelta(days=1)
     prediction_date_str = prediction_date.strftime('%Y-%m-%d')  # Convert to string for JSON serialization
 
-    # Output the required information as an array
-    output = [
-        symbol,  # Stock ticker
-        start_date,  # Start date
-        end_date,  # End date
-        prediction_date_str,  # The day for which the prediction is made
-        predicted_price_next_day,  # Predicted Price for Next Day
-        accuracy_percentage,  # Percent Accuracy so far on trained data
-        "A Pixel Journey Creation"  # Custom message
-    ]
+    # Calculate the percent gain or loss
+    actual_last_day_price = actual_prices[-1] if len(actual_prices) > 0 else None
+    if actual_last_day_price and predicted_price_next_day:
+        percent_change = ((predicted_price_next_day - actual_last_day_price) / actual_last_day_price) * 100
+    else:
+        percent_change = None  # In case data is missing
 
-    # Return the results as JSON
-    return jsonify(output)
+    # Output the required information as an array
+    output = {
+        "Symbol": symbol,  # Stock ticker
+        "Start Date": start_date,  # Start date for the data used in prediction
+        "End Date": end_date,  # End date for the data used in prediction
+        "Prediction Date": prediction_date_str,  # The day for which the prediction is made
+        "Predicted Price for Next Day": predicted_price_next_day,  # Predicted Price for the next day
+        "Accuracy Percentage": accuracy_percentage,  # Percent Accuracy of the model on trained data        
+        "Percent Change from Last Day": percent_change,  # Percent gain or loss from yesterday's prediction
+        "Riches do not exhilarate us so much with their possession as they torment us with their loss.": "Epicurus"  # Any custom message you want to include
+    }
+
+    response = app.response_class(
+        response=json.dumps(output, indent=4),
+        status=200,
+        mimetype='application/json'
+    )
+    return response
 
 # Running the Flask app
 if __name__ == '__main__':
