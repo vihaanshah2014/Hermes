@@ -1,3 +1,4 @@
+# Importing necessary libraries
 import os
 import numpy as np
 import pandas as pd
@@ -11,6 +12,7 @@ from tensorflow.keras.layers import Dense, Dropout, LSTM
 import datetime as dt
 import matplotlib.pyplot as plt
 
+# Suppressing unnecessary warnings
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 warnings.filterwarnings('ignore', category=DeprecationWarning)
 warnings.filterwarnings('ignore', category=UserWarning, message='Starting a Matplotlib GUI outside of the main thread will likely fail.')
@@ -32,12 +34,13 @@ def create_model(input_shape):
     model.compile(optimizer='adam', loss='mean_squared_error')
     return model
 
+# Route for prediction
 @app.route('/')
 def predict():
     # Example hardcoded values for demonstration
     symbol = 'SPY'
     start_date = '2022-01-01'
-    end_date = '2024-02-23'
+    end_date = '2024-02-22'
     prediction_days = 60
 
     # Load and prepare data
@@ -48,6 +51,7 @@ def predict():
     x_train = []
     y_train = []
 
+    # Generating training data
     for x in range(prediction_days, len(scaled_data)):
         x_train.append(scaled_data[x-prediction_days:x, 0])
         y_train.append(scaled_data[x, 0])
@@ -73,6 +77,7 @@ def predict():
 
     x_test = []
 
+    # Generating test data
     for x in range(prediction_days, len(model_inputs)):
         x_test.append(model_inputs[x-prediction_days:x, 0])
 
@@ -87,17 +92,13 @@ def predict():
     mape = np.mean(np.abs((actual_prices_trimmed - predicted_prices.flatten()) / actual_prices_trimmed)) * 100
 
     # Adjusting for output: Get the last predicted price as the next day's prediction
-    predicted_price_next_day = predicted_prices[-1][0] if predicted_prices.size > 0 else None
-
-    # Adjusting for output: Get the last predicted price as the next day's prediction
-    predicted_price_next_day = float(predicted_prices[-1][0]) if predicted_prices.size > 0 else None  # Convert to Python float
+    predicted_price_next_day = float(predicted_prices[-1][0]) if predicted_prices.size > 0 else None
 
     # Convert the MAPE to a float as well
     accuracy_percentage = float(100 - mape)  # Ensure this is a native Python float
 
     prediction_date = dt.datetime.strptime(end_date, '%Y-%m-%d') + dt.timedelta(days=1)
     prediction_date_str = prediction_date.strftime('%Y-%m-%d')  # Convert to string for JSON serialization
-
 
     # Output the required information as an array
     output = [
@@ -113,6 +114,6 @@ def predict():
     # Return the results as JSON
     return jsonify(output)
 
-
+# Running the Flask app
 if __name__ == '__main__':
     app.run(debug=True)
