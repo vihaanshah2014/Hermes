@@ -95,7 +95,7 @@ def plot_results(actual_prices, predicted_prices, company):
 
 
 # Main execution flow
-company = 'SPY'
+company = 'BTC-USD'
 prediction_days = 60
 epochs = 2  # Can be parameterized for expansion
 
