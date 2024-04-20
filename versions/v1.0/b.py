@@ -1,5 +1,3 @@
-# B.A.S.T.A.R.D - Boldly Analyzing and Strategizing Trade Algorithm for Radical Dividends
-
 
 from lumibot.brokers import Alpaca
 from lumibot.backtesting import YahooDataBacktesting
