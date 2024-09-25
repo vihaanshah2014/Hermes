@@ -105,7 +105,7 @@ def main():
 
     # Define date range
     end_date = datetime.datetime.today()
-    start_date = end_date - datetime.timedelta(days=3*365)  # 1 year of data
+    start_date = end_date - datetime.timedelta(days=365) 
 
     # Fetch data
     print("Fetching data...")
