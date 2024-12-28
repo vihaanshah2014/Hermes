@@ -1,0 +1,126 @@
+{
+    "description": "Corporations of the Dow Jones Industrial Average",
+    "corporations": [
+      {
+        "symbol": "MMM",
+        "name": "3M"
+      },
+      {
+        "symbol": "AXP",
+        "name": "American Express"
+      },
+      {
+        "symbol": "AMGN",
+        "name": "Amgen"
+      },
+      {
+        "symbol": "AMZN",
+        "name": "Amazon"
+      },
+      {
+        "symbol": "AAPL",
+        "name": "Apple"
+      },
+      {
+        "symbol": "BA",
+        "name": "Boeing"
+      },
+      {
+        "symbol": "CAT",
+        "name": "Caterpillar"
+      },
+      {
+        "symbol": "CVX",
+        "name": "Chevron"
+      },
+      {
+        "symbol": "CSCO",
+        "name": "Cisco Systems"
+      },
+      {
+        "symbol": "KO",
+        "name": "Coca-Cola"
+      },
+      {
+        "symbol": "DIS",
+        "name": "Walt Disney"
+      },
+      {
+        "symbol": "GS",
+        "name": "Goldman Sachs"
+      },
+      {
+        "symbol": "HD",
+        "name": "Home Depot"
+      },
+      {
+        "symbol": "HON",
+        "name": "Honeywell"
+      },
+      {
+        "symbol": "IBM",
+        "name": "IBM"
+      },
+      {
+        "symbol": "JNJ",
+        "name": "Johnson & Johnson"
+      },
+      {
+        "symbol": "JPM",
+        "name": "JPMorgan Chase"
+      },
+      {
+        "symbol": "MCD",
+        "name": "McDonald's"
+      },
+      {
+        "symbol": "MRK",
+        "name": "Merck"
+      },
+      {
+        "symbol": "MSFT",
+        "name": "Microsoft"
+      },
+      {
+        "symbol": "NKE",
+        "name": "Nike"
+      },
+      {
+        "symbol": "NVDA",
+        "name": "Nvidia"
+      },
+      {
+        "symbol": "PG",
+        "name": "Procter & Gamble"
+      },
+      {
+        "symbol": "CRM",
+        "name": "Salesforce"
+      },
+      {
+        "symbol": "SHW",
+        "name": "Sherwin-Williams"
+      },
+      {
+        "symbol": "TRV",
+        "name": "Travelers Companies"
+      },
+      {
+        "symbol": "UNH",
+        "name": "UnitedHealth Group"
+      },
+      {
+        "symbol": "VZ",
+        "name": "Verizon Communications"
+      },
+      {
+        "symbol": "V",
+        "name": "Visa"
+      },
+      {
+        "symbol": "WMT",
+        "name": "Walmart"
+      }
+    ]
+  }
+  
