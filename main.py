@@ -1,9 +1,12 @@
+from __future__ import annotations
+
 import json
-import os
-import yfinance as yf
+from dataclasses import dataclass
+
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
+import yfinance as yf
 
 ###################
 # 1) JSON loading
@@ -36,87 +39,152 @@ def fetch_all_symbols_from_jsons(djia_json_path, nasdaq_json_path):
     return list(combined.items())
 
 ###################
-# 2) Bayesian forced-close logic
+# 2) Risk-managed trading logic
 ###################
-def bayesian_update(prior_mean, prior_variance, observed_price, predicted_price, likelihood_variance):
-    error = observed_price - predicted_price
-    posterior_variance = 1.0 / (1.0 / prior_variance + 1.0 / likelihood_variance)
-    posterior_variance = np.clip(posterior_variance, 1e-7, 1.0)
 
-    posterior_mean = posterior_variance * (
-        (prior_mean / prior_variance) + (error / likelihood_variance)
-    )
-    posterior_mean = np.clip(posterior_mean, -0.5, 0.5)
-    return posterior_mean, posterior_variance
 
-def predict_next_price(current_price, prior_mean):
-    return current_price * (1.0 + prior_mean)
+@dataclass(frozen=True)
+class StrategyConfig:
+    """Configuration for the human-like discretionary strategy."""
 
-def trading_simulation_close_positions(prices_df, prior_mean, prior_variance, likelihood_variance, initial_capital):
+    short_window: int = 20
+    long_window: int = 60
+    signal_threshold: float = 0.002
+    risk_per_trade: float = 0.02
+    max_position_fraction: float = 0.5
+    stop_loss_pct: float = 0.03
+    take_profit_pct: float = 0.06
+    min_portfolio_fraction: float = 0.1
+
+
+DEFAULT_STRATEGY = StrategyConfig()
+
+
+def _prepare_strategy_frame(prices_df: pd.DataFrame, config: StrategyConfig) -> pd.DataFrame:
+    """Return a copy of prices with moving averages required by the strategy."""
+
+    df = prices_df.copy()
+    df = df.astype(float)
+
+    df["sma_short"] = df["Close"].rolling(config.short_window, min_periods=1).mean()
+    df["sma_long"] = df["Close"].rolling(config.long_window, min_periods=1).mean()
+    return df
+
+
+def _determine_signal(short_ma: float, long_ma: float, threshold: float) -> int:
+    """Return -1 for short, 1 for long, and 0 for neutral."""
+
+    if not np.isfinite(short_ma) or not np.isfinite(long_ma) or long_ma == 0:
+        return 0
+
+    momentum = (short_ma - long_ma) / abs(long_ma)
+    if momentum > threshold:
+        return 1
+    if momentum < -threshold:
+        return -1
+    return 0
+
+
+def trading_simulation_close_positions(prices_df: pd.DataFrame, config: StrategyConfig, initial_capital: float) -> float | None:
+    """Simulate a human-like swing strategy with risk management.
+
+    The strategy uses a moving-average momentum signal with stop-loss and
+    take-profit rules. It respects position sizing and halts if the portfolio
+    value falls below a safety threshold.
     """
-    Forced-close, day-by-day. Return final portfolio value or None if bust.
-    """
-    daily_prices = prices_df["Close"].values
+
+    if prices_df.empty or "Close" not in prices_df:
+        return None
+
+    df = _prepare_strategy_frame(prices_df, config)
+    initial_capital = float(initial_capital)
     capital = initial_capital
-    shares = 0.0
-    short_shares = 0.0
-    short_proceeds = 0.0
+    position = 0  # positive for long, negative for short
+    entry_price = None
+    stop_price = None
+    take_profit_price = None
 
-    for i in range(1, len(daily_prices)):
-        current_price = daily_prices[i - 1]
-        observed_price = daily_prices[i]
+    min_portfolio_value = initial_capital * config.min_portfolio_fraction
 
-        # Predict
-        predicted_price = predict_next_price(current_price, prior_mean)
+    for _, row in df.iterrows():
+        price = float(row["Close"])
+        short_ma = float(row["sma_short"])
+        long_ma = float(row["sma_long"])
+        signal = _determine_signal(short_ma, long_ma, config.signal_threshold)
 
-        # Close existing position
-        if shares > 0:
-            capital += shares * observed_price
-            shares = 0.0
-        if short_shares > 0:
-            cost_to_close = short_shares * observed_price
-            capital -= cost_to_close
-            short_shares = 0.0
-            short_proceeds = 0.0
+        # Exit logic first so we don't open and close on the same bar.
+        if position != 0 and entry_price is not None:
+            exit_trade = False
+            if position > 0:
+                if price <= stop_price or price <= 0:
+                    exit_trade = True
+                elif price >= take_profit_price:
+                    exit_trade = True
+                elif signal <= 0:
+                    exit_trade = True
+                if exit_trade:
+                    capital += position * price
+            else:  # short position
+                shares_short = abs(position)
+                if price >= stop_price or price <= 0:
+                    exit_trade = True
+                elif price <= take_profit_price:
+                    exit_trade = True
+                elif signal >= 0:
+                    exit_trade = True
+                if exit_trade:
+                    capital -= shares_short * price
 
-        # Open new position
-        if predicted_price > current_price:
-            shares_to_buy = capital / current_price
-            shares = shares_to_buy
-            capital -= shares_to_buy * current_price
-        elif predicted_price < current_price:
-            shares_to_short = capital / current_price
-            short_shares = shares_to_short
-            short_proceeds = shares_to_short * current_price
-            capital += short_proceeds
+            if exit_trade:
+                position = 0
+                entry_price = None
+                stop_price = None
+                take_profit_price = None
+
+        # Entry logic
+        if position == 0 and signal != 0 and price > 0:
+            risk_capital = capital * config.risk_per_trade
+            max_capital = capital * config.max_position_fraction
+            stop_distance = config.stop_loss_pct * price
+
+            if stop_distance > 0 and risk_capital > 0 and max_capital > 0:
+                theoretical_shares = risk_capital / stop_distance
+                max_shares = max_capital / price
+                shares = int(np.floor(min(theoretical_shares, max_shares)))
+
+                if shares > 0:
+                    if signal > 0:
+                        capital -= shares * price
+                        position = shares
+                        entry_price = price
+                        stop_price = price * (1.0 - config.stop_loss_pct)
+                        take_profit_price = price * (1.0 + config.take_profit_pct)
+                    else:  # short entry
+                        capital += shares * price
+                        position = -shares
+                        entry_price = price
+                        stop_price = price * (1.0 + config.stop_loss_pct)
+                        take_profit_price = price * (1.0 - config.take_profit_pct)
+
+        # Safety check on portfolio value
+        if position > 0:
+            portfolio_value = capital + position * price
+        elif position < 0:
+            shares_short = abs(position)
+            portfolio_value = capital - shares_short * price
         else:
-            pass
+            portfolio_value = capital
 
-        # Check bust
-        long_value = shares * observed_price
-        short_value = 0.0
-        if short_shares > 0:
-            cost_to_buy_back = short_shares * observed_price
-            short_value = short_proceeds - cost_to_buy_back
+        if portfolio_value <= min_portfolio_value:
+            return None
 
-        portfolio_value = capital + long_value + short_value
-        if portfolio_value <= 0:
-            return None  # BUST
+    # Close any open position at the final price
+    if position > 0 and entry_price is not None:
+        capital += position * df["Close"].iloc[-1]
+    elif position < 0 and entry_price is not None:
+        capital -= abs(position) * df["Close"].iloc[-1]
 
-        # Bayesian update
-        prior_mean, prior_variance = bayesian_update(
-            prior_mean, prior_variance, observed_price, predicted_price, likelihood_variance
-        )
-
-    # Final evaluation
-    last_price = daily_prices[-1]
-    final_long_value = shares * last_price
-    final_short_value = 0.0
-    if short_shares > 0:
-        cost_to_buy_back = short_shares * last_price
-        final_short_value = short_proceeds - cost_to_buy_back
-
-    return capital + final_long_value + final_short_value
+    return float(capital)
 
 ###################
 # 3) Worker function (no concurrency)
@@ -157,10 +225,8 @@ def process_symbol(sym, start_date, end_date):
         # Forced close
         fc_val = trading_simulation_close_positions(
             df,
-            prior_mean=0.0,
-            prior_variance=0.01,
-            likelihood_variance=0.005,
-            initial_capital=100.0
+            config=DEFAULT_STRATEGY,
+            initial_capital=100.0,
         )
         if fc_val is None:
             out["status"] = "BUST"
